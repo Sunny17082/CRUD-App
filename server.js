@@ -1,17 +1,23 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
 const morgan = require("morgan");
-const bodypraser = require("body-parser");
+const bodyparser = require("body-parser");
+const path = require("path");
 
 const app = express();
 
 const PORT = process.env.PORT || 8080;
 
-//log request
+// log request
 app.use(morgan("tiny"));
 
 //parse request to body-parser
 app.use(bodyparser.urlencoded({extended: true}));
+
+// set view engine
+app.set("view engine", "ejs");
+// if ejs files are anywhere other than views folder
+// app.set("views", path.resolve(__dirname,"views/ejs"));
 
 app.get("/", (req, res) => {
     res.send("CRUD Application");
