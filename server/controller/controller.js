@@ -44,7 +44,25 @@ exports.find = (req, res) => {
 
 // Update a new identified user by user id
 exports.update = (req, res) => {
-    
+    if(!req.body) {
+        return res
+        .status(400)
+        .send({message: "Data to update cannot be empty"});
+    }
+    const id = req.params.id;
+    Userdb.findByIdAndUpdate(id, req.body, {useFindAndModify: false})
+    .then(data => {
+        if(!data) {
+            res.status(400).send({message: `Cannot update user with ${id}. Maybe user not found!`});
+        } else {
+            res.send(data)
+        }
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: err.message || "Error update user information"
+        });
+    })
 }
 
 // Delete a user with a specified id in the request
